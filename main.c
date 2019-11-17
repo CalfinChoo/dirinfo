@@ -65,7 +65,7 @@ int main() {
   printf("Total directory size: %s\n", buffer);
   printf("Directories:\n");
   int i = 0;
-  for (; i < sizeof(directories)/sizeof(directories[0])); i++) {
+  for (; i < sizeof(directories)/sizeof(directories[0]); i++) {
     printf("%s\n", directories[i]);
   }
   printf("Regular files:\n");
