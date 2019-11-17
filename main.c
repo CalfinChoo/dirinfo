@@ -16,7 +16,11 @@ int main() {
   }
   struct dirent * p = readdir(d);
   int num_files = 0, num_dirs = 0;
+  int size = 0;
   while (p != NULL) {
+    struct stat sb;
+    stat(p->d_name, &sb);
+    size += sb.st_size;
     if (p->d_type == 4) num_dirs++;
     else num_files++;
     p = readdir(d);
@@ -41,10 +45,27 @@ int main() {
 
 
   printf("Statistics for directory: .\n");
-  printf("Total directory size: placeholder\n");
+  char buffer[50];
+  char metric[8];
+  int m = 1;
+  if (size / 1000000000 > 0) {
+    sprintf(metric, "%s", "GB");
+    m = 1000000000;
+  }
+  else if (size / 1000000 > 0) {
+    sprintf(metric, "%s", "MB");
+    m = 1000000;
+  }
+  else if (size / 1000 > 0) {
+    sprintf(metric, "%s", "KB");
+    m = 1000;
+  }
+  else sprintf(metric, "%s", "B");
+  sprintf(buffer, "%0.1lf %s", (double)size/m, metric);
+  printf("Total directory size: %s\n", buffer);
   printf("Directories:\n");
   int i = 0;
-  for (; i < sizeof(directories)/(sizeof(directories[0])/sizeof(char)); i++) {
+  for (; i < sizeof(directories)/sizeof(directories[0])); i++) {
     printf("%s\n", directories[i]);
   }
   printf("Regular files:\n");
