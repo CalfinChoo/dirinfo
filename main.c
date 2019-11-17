@@ -18,11 +18,13 @@ int main() {
   int num_files = 0, num_dirs = 0;
   int size = 0;
   while (p != NULL) {
-    struct stat sb;
-    stat(p->d_name, &sb);
-    size += sb.st_size;
     if (p->d_type == 4) num_dirs++;
-    else num_files++;
+    else {
+      num_files++;
+      struct stat sb;
+      stat(p->d_name, &sb);
+      size += sb.st_size;
+    }
     p = readdir(d);
   }
   char directories[num_dirs][256], files[num_files][256];
