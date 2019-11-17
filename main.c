@@ -14,18 +14,21 @@ int main() {
         printf("Could not open current directory");
         return 0;
   }
-  struct dirent * p = readdir(d), c = readdir(d);
+  struct dirent * p = readdir(d);
   int num_files = 0, num_dirs = 0;
-  while (c != NULL) {
-    if (c->d_type == 4) num_dirs++;
+  while (p != NULL) {
+    if (p->d_type == 4) num_dirs++;
     else num_files++;
-    c = readdir(d);
+    p = readdir(d);
   }
   char directories[num_dirs][256], files[num_files][256];
+  closedir(d);
+  d = opendir(".");
+  p = readdir(d);
   int d_count = 0, f_count = 0;
   while (p != NULL) {
     // printf("%s, %d\n", p->d_name, p->d_type);
-    if (p->d_type == 4) {
+    if ((int)p->d_type == 4) {
       strcpy(directories[d_count], p->d_name);
       d_count++;
     }
@@ -41,12 +44,12 @@ int main() {
   printf("Total directory size: placeholder\n");
   printf("Directories:\n");
   int i = 0;
-  for (; i < sizeof(directories)/sizeof(directories[0]); i++) {
+  for (; i < sizeof(directories)/(sizeof(directories[0])/sizeof(char)); i++) {
     printf("%s\n", directories[i]);
   }
   printf("Regular files:\n");
   i = 0;
   for (; i < sizeof(files)/sizeof(files[0]); i++) {
-    printf("%s\n", directories[i]);
+    printf("%s\n", files[i]);
   }
 }
