@@ -8,10 +8,18 @@
 #include <dirent.h>
 #include <sys/types.h>
 
-int main() {
-  DIR * d = opendir(".");
+int main(int argc, char * argv[]) {
+  DIR * d;
+  char s[256];
+  if (argc == 1) {
+    fgets(s, sizeof(s), stdin);
+    size_t ln = strlen(s) - 1;
+    if (s[ln] == '\n') s[ln] = '\0';
+  }
+  else strcpy(s, argv[1]);
+  d = opendir(s);
   if (d == NULL) {
-        printf("Could not open current directory");
+    printf("%s\n", strerror(errno));
         return 0;
   }
   struct dirent * p = readdir(d);
@@ -29,7 +37,7 @@ int main() {
   }
   char directories[num_dirs][256], files[num_files][256];
   closedir(d);
-  d = opendir(".");
+  d = opendir(s);
   p = readdir(d);
   int d_count = 0, f_count = 0;
   while (p != NULL) {
