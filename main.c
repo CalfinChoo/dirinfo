@@ -54,7 +54,7 @@ int main(int argc, char * argv[]) {
   }
 
 
-  printf("Statistics for directory: .\n");
+  printf("Statistics for directory: %s\n", s);
   char buffer[50];
   char metric[8];
   int m = 1;
